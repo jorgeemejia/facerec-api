@@ -13,12 +13,14 @@ const db = knex({
     client: 'pg',
     connection: {
       connectionString : 'process.env.DATABASE_URL',
-      ssl: true
+      ssl: {
+        rejectUnauthorized: false,
+      },
     // //   port : 3306,
     //   user : 'postgres',
     //   password : 'joemama',
     //   database : `'smart-brain'`
-    }
+    },
   });
 
 // I think i remove this
