@@ -12,101 +12,25 @@ const image = require('./controllers/image');
 const db = knex({
     client: 'pg',
     connection: {
-    connectionString: process.env.DATABASE_URL,
-      ssl: {
-        rejectUnauthorized: false
-      },
-    // //   port : 3306,
-    //   user : 'postgres',
-    //   password : 'joemama',
-    //   database : `'smart-brain'`
+        host: '127.0.0.1',
+        user: '',
+        password : '',
+        database : 'smart-brain'
     },
   });
-
-// I think i remove this
-// db.select('*').from('users').then(data => {
-//     console.log(data);
-// });
 
 const app = express();
 
 app.use(bodyParser.json());
 app.use(cors());
 
-const database = {
-    users: [
-        {
-            id: '123',
-            name: 'John',
-            email: 'john@gmail.com',
-            password: 'cookies',
-            entries: 0,
-            joined: new Date()       
-        },
-        {
-            id: '124',
-            name: 'Sally',
-            email: 'sally@gmail.com',
-            password: 'bananas',
-            entries: 0,
-            joined: new Date()       
-        }
-    ],
-    login: [
-        {
-            id: '987',
-            hash: '',
-            email: 'john@gmail.com'
-        }
-    ]
-}
-
-//create basic route
-app.get('/', (req,res) =>{
-    res.send('success')
-})
-
-
-// // Load hash from your password DB.
-// bcrypt.compare("bacon", hash, function(err, res) {
-//     // res == true
-// });
-// bcrypt.compare("veggies", hash, function(err, res) {
-//     // res = false
-// });
-
-//Mockup Signin
+app.get('/', (req,res) =>{res.send(db.users)})
 app.post('/signin', (req, res) => {signin.handleSignin(req, res, db, bcrypt)})
-
-//Mockup Register
 app.post('/register', (req,res) => {register.handleRegister(req, res, db, bcrypt)})
-
-
 app.get('/profile/:id', (req, res) => {profile.handleProfileGet(req, res, db)})
-
-
 app.put('/image', (req, res) => {image.handleImage(req, res, db)})
-
 app.post('/imageurl', (req, res) => {image.handleApiCall(req, res)})
 
-
-// // Load hash from your password DB.
-// bcrypt.compare("bacon", hash, function(err, res) {
-//     // res == true
-// });
-// bcrypt.compare("veggies", hash, function(err, res) {
-//     // res = false
-// });
-
-app.listen(process.env.PORT || 3000, ()=>{
+app.listen(process.env.PORT || 3001, ()=>{
     console.log('app is running');
 })
-
-
-
-// ROUTES
-
-// /signin -- POST (posting user information) -> results in suc or fail
-// /register -- POST (add data to our database) -> results in new user
-// /profile/:userId --> GET (get user information)
-// /image --> PUT (update)
